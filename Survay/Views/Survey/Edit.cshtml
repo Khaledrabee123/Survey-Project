@@ -1,0 +1,426 @@
+﻿@model Survay.Models.DTO.servayDTO
+
+@{
+    ViewData["Title"] = "Edit Survey";
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+
+    form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin: auto;
+    }
+
+    label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+        color: #444;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .question {
+        background: #eef1f5;
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+    }
+
+    .choices {
+        margin-top: 10px;
+    }
+
+    .choice {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 5px;
+    }
+
+        .choice input {
+            flex-grow: 1;
+        }
+
+    .new-choice-input {
+        margin-top: 5px;
+    }
+
+    .buttons-container {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+    .remove-choice,
+    .remove-question-btn {
+        background-color: #dc3545;
+    }
+
+        .remove-choice:hover,
+        .remove-question-btn:hover {
+            background-color: #c82333;
+        }
+
+    .add-choice-btn {
+        background-color: #007bff;
+    }
+
+        .add-choice-btn:hover {
+            background-color: #0056b3;
+        }
+
+    .add-question-btn {
+        background-color: #ffc107;
+        color: #333;
+    }
+
+        .add-question-btn:hover {
+            background-color: #e0a800;
+        }
+
+    .buttons-container {
+        margin-top: 15px;
+    }
+</style>
+
+<h2>Edit Survey</h2>
+
+<form id="editSurveyForm" asp-action="Edit" asp-controller="Survey" method="post">
+    <input type="hidden" asp-for="SurveyID" />
+
+    <label>Survey Title:</label>
+    <input type="text" asp-for="Title" required />
+
+    <label>Survey Description:</label>
+    <textarea asp-for="Description" required></textarea>
+
+    <div id="questions">
+        @for (int i = 0; i < Model.Questions?.Count; i++)
+        {
+            <div class="question" id="question-@i">
+                <input type="hidden" name="Questions[@i].QuestionID" value="@Model.Questions[i].QuestionID" />
+
+                <label>Question Text:</label>
+                <input type="text" class="question-text" data-question-id="@Model.Questions[i].QuestionID" value="@Model.Questions[i].QuestionText" required />
+
+                <label>Question Type:</label>
+                <select class="question-type" data-question-id="@Model.Questions[i].QuestionID">
+                    <option value="MCQ" selected="@(Model.Questions[i].QuestionType == "MCQ" ? "selected" : null)">Multiple Choice (MCQ)</option>
+                    <option value="Essay" selected="@(Model.Questions[i].QuestionType == "Essay" ? "selected" : null)">Essay</option>
+                </select>
+
+                <div class="choices" id="choices-@i" style="@(Model.Questions[i].QuestionType == "Essay" ? "display: none;" : "")">
+                    <label>Choices:</label>
+                    @for (int j = 0; j < Model.Questions[i].choseDTOs?.Count; j++)
+                    {
+                        <div class="choice" id="choice-@Model.Questions[i].choseDTOs[j].Id">
+                            <input type="text" class="choice-input" data-choice-id="@Model.Questions[i].choseDTOs[j].Id" value="@Model.Questions[i].choseDTOs[j].Text" required />
+                            <button type="button" class="remove-choice" data-choice-id="@Model.Questions[i].choseDTOs[j].Id">Remove</button>
+                        </div>
+                    }
+                </div>
+
+                <input type="text" class="new-choice-input" id="choice-input-@i" placeholder="Enter new choice" />
+                <button type="button" class="add-choice-btn" data-question-index="@i" data-question-id="@Model.Questions[i].QuestionID">Add Choice</button>
+                <button type="button" class="remove-question-btn" data-question-id="@Model.Questions[i].QuestionID">Remove Question</button>
+            </div>
+        }
+    </div>
+
+    <div>
+        <input type="text" id="new-question-input" placeholder="Enter new question" />
+        <button type="button" class="add-question-btn">Add Question</button>
+    </div>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(document).on("change", ".question-text", function () {
+            let questionId = $(this).data("question-id");
+            let newText = $(this).val().trim();
+            if (newText) {
+                updateQuestion(questionId, "text", newText);
+            }
+        });
+
+        $(document).on("change", ".question-type", function () {
+            let questionId = $(this).data("question-id");
+            let newType = $(this).val();
+            updateQuestion(questionId, "type", newType);
+
+            let questionIndex = $(this).closest(".question").attr("id").split("-")[1];
+            toggleQuestionInput(this, questionIndex);
+        });
+
+        $(document).on("change", ".choice-input", function () {
+            let choiceId = $(this).data("choice-id");
+            let newText = $(this).val().trim();
+            if (newText) {
+                updateChoice(choiceId, newText);
+            }
+        });
+
+        $(document).on("click", ".add-question-btn", function () {
+            addQuestion();
+        });
+
+        $(document).on("click", ".add-choice-btn", function () {
+            let questionIndex = $(this).data("question-index");
+            let questionId = $(this).data("question-id");
+            addChoice(questionIndex, questionId);
+        });
+
+        $(document).on("click", ".remove-choice", function () {
+            let choiceId = $(this).data("choice-id");
+            removeChoice(choiceId, this);
+        });
+
+        $(document).on("click", ".remove-question-btn", function () {
+            removeQuestion(this);
+        });
+
+        $(document).on("change", "input[name='Title']", function () {
+            let surveyId = $("input[name='SurveyID']").val();
+            let newTitle = $(this).val().trim();
+            if (newTitle) {
+                updateSurvey(surveyId, "Title", newTitle);
+            }
+        });
+
+        $(document).on("change", "textarea[name='Description']", function () {
+            let surveyId = $("input[name='SurveyID']").val();
+            let newDescription = $(this).val().trim();
+            if (newDescription) {
+                updateSurvey(surveyId, "Description", newDescription);
+            }
+        });
+
+        function updateSurvey(surveyId, field, value) {
+            $.ajax({
+                url: `/Survey/UpdateSurvey`,
+                type: "POST",
+                data: { surveyId: surveyId, field: field, value: value },
+                success: function () {
+                    console.log("Survey updated.");
+                },
+                error: function () {
+                    alert("Error updating survey.");
+                }
+            });
+        }
+      
+
+    });
+
+    function updateSurvey(surveyId, field, value) {
+        $.ajax({
+            url: `/Survey/UpdateSurvey`,
+            type: "POST",
+            data: { surveyId: surveyId, field: field, value: value },
+            success: function () {
+                console.log("Survey updated.");
+            },
+            error: function () {
+                alert("Error updating survey.");
+            }
+        });
+    }
+    function updateQuestion(questionId, field, value) {
+        $.ajax({
+            url: `/Survey/UpdateQuestion`,
+            type: "POST",
+            data: { questionId: questionId, field: field, value: value },
+            success: function () {
+                console.log("Question updated.");
+            },
+            error: function () {
+                alert("Error updating question.");
+            }
+        });
+    }
+
+    function updateChoice(choiceId, newText) {
+        $.ajax({
+            url: `/Survey/UpdateChoice`,
+            type: "POST",
+            data: { choiceId: choiceId, newText: newText },
+            success: function () {
+                console.log("Choice updated.");
+            },
+            error: function () {
+                alert("Error updating choice.");
+            }
+        });
+    }
+
+    function addQuestion() {
+        let surveyId = $("input[name='SurveyID']").val();
+        let questionInput = $("#new-question-input");
+        let questionText = questionInput.val().trim();
+
+        if (!questionText) {
+            alert("Question text cannot be empty.");
+            return;
+        }
+
+        $.ajax({
+            url: `/Survey/AddQuestion?surveyId=${surveyId}&text=${encodeURIComponent(questionText)}`,
+            type: "POST",
+            success: function (response) {
+                let questionIndex = $(".question").length;
+                let newQuestionHtml = `
+                                    <div class="question" id="question-${questionIndex}">
+                                        <input type="hidden" value="${response.questionId}" />
+
+                                        <label>Question Text:</label>
+                                        <input type="text" class="question-text" data-question-id="${response.questionId}" value="${response.text}" required />
+
+                                        <label>Question Type:</label>
+                                        <select class="question-type" data-question-id="${response.questionId}">
+                                            <option value="MCQ">Multiple Choice (MCQ)</option>
+                                            <option value="Essay">Essay</option>
+                                        </select>
+
+                                        <div class="choices" id="choices-${questionIndex}">
+                                            <label>Choices:</label>
+                                        </div>
+
+                                        <input type="text" class="new-choice-input" id="choice-input-${questionIndex}" placeholder="Enter new choice" />
+                                        <button type="button" class="add-choice-btn" data-question-index="${questionIndex}" data-question-id="${response.questionId}">Add Choice</button>
+                                        <button type="button" class="remove-question-btn" data-question-id="${response.questionId}">Remove Question</button>
+                                    </div>
+                                `;
+                $("#questions").append(newQuestionHtml);
+                questionInput.val("");
+            },
+            error: function () {
+                alert("Error adding question.");
+            }
+        });
+    }
+
+    function removeQuestion(button) {
+        let questionDiv = $(button).closest(".question");
+        let questionId = $(button).data("question-id");
+
+        if (!confirm("Are you sure you want to remove this question?")) {
+            return;
+        }
+
+        $.ajax({
+            url: `/Survey/DeleteQuestion?questionId=${questionId}`,
+            type: "POST",
+            success: function () {
+                questionDiv.remove();
+            },
+            error: function () {
+                alert("Error removing question.");
+            }
+        });
+    }
+
+    function addChoice(questionIndex, questionId) {
+        let choiceInput = $(`#choice-input-${questionIndex}`);
+        let choiceText = choiceInput.val().trim();
+
+        if (!choiceText) {
+            alert("Choice text cannot be empty.");
+            return;
+        }
+
+        $.ajax({
+            url: `/Survey/AddChoice?questionId=${questionId}&text=${encodeURIComponent(choiceText)}`,
+            type: "POST",
+            success: function (response) {
+                let newChoiceHtml = `
+                                    <div class="choice" id="choice-${response.choiceId}">
+                                        <input type="text" class="choice-input" data-choice-id="${response.choiceId}" value="${response.text}" />
+                                        <button type="button" class="remove-choice" data-choice-id="${response.choiceId}">Remove</button>
+                                    </div>
+                                `;
+                $(`#choices-${questionIndex}`).append(newChoiceHtml);
+                choiceInput.val("");
+            }
+        });
+    }
+
+    function removeChoice(choiceId, button) {
+        let choiceDiv = $(button).closest(".choice");
+
+        if (!confirm("Are you sure you want to remove this choice?")) {
+            return;
+        }
+
+        $.ajax({
+            url: `/Survey/RemoveChoice?choiceId=${choiceId}`,
+            type: "POST",
+            success: function () {
+                choiceDiv.remove();
+            },
+            error: function () {
+                alert("Error occurred while removing choice.");
+            }
+        });
+    }
+    function toggleQuestionInput(selectElement, questionIndex) {
+        let selectedType = $(selectElement).val();
+        let choicesDiv = $(`#choices-${questionIndex}`);
+        let addChoiceButton = $(`.add-choice-btn[data-question-index="${questionIndex}"]`);
+
+        if (selectedType === "Essay") {
+            choicesDiv.hide();
+            addChoiceButton.hide();
+        } else {
+            choicesDiv.show();
+            addChoiceButton.show();
+        }
+    }
+</script>

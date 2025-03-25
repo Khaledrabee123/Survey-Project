@@ -1,0 +1,205 @@
+﻿@model Survay.Models.DTO.servayDTO
+
+<style>
+form {
+    width: 50%;
+    margin: auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Label styling */
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Input fields and textareas */
+input[type="text"],
+textarea,
+select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styling for the question section */
+.question {
+    background: #ffffff;
+    padding: 15px;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Choices section */
+.choices {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+/* Buttons */
+button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button[type="button"] {
+    background-color: #007bff;
+    color: white;
+}
+
+button[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+/* Remove buttons */
+button[onclick^="remove"] {
+    background-color: #dc3545;
+    color: white;
+}
+
+button[onclick^="remove"]:hover {
+    background-color: #c82333;
+}
+
+/* Styling the "Add Choice" button */
+.add-choice-btn {
+    background-color: #17a2b8;
+}
+
+.add-choice-btn:hover {
+    background-color: #138496;
+}
+</style>
+<form asp-action="SubmitSurvey" asp-controller="Survey" method="post">
+    <label>Survey Title:</label>
+    <input type="text" asp-for="Title" required />
+
+    <label>Survey Description:</label>
+    <textarea asp-for="Description" required></textarea>
+
+    <div id="questions">
+        <div class="question">
+            <label>Question Text:</label>
+            <input type="text" name="Questions[0].QuestionText" required />
+
+            <label>Question Type:</label>
+            <select name="Questions[0].QuestionType" onchange="toggleQuestionInput(this)">
+                <option value="MCQ">Multiple Choice (MCQ)</option>
+                <option value="Essay">Essay</option>
+            </select>
+
+
+
+            <div class="choices">
+                <label>Choices:</label>
+                <div class="choice">
+                    <input type="text" name="Questions[0].ChoseDTOs[0].Text" required />
+                    <button type="button" onclick="removeChoice(this)">Remove</button>
+                </div>
+            </div>
+
+            <button type="button" class="add-choice-btn" onclick="addChoice(this)">Add Choice</button>
+            <button type="button" onclick="removeQuestion(this)">Remove Question</button>
+        </div>
+    </div>
+
+    <button type="button" onclick="addQuestion()">Add Question</button>
+    <button type="submit">Submit Survey</button>
+</form>
+
+<script>
+    let questionIndex = 1;
+
+    function addQuestion() {
+        let questionsDiv = document.getElementById("questions");
+        let div = document.createElement("div");
+        div.classList.add("question");
+        div.innerHTML = `
+                    <label>Question Text:</label>
+                    <input type="text" name="Questions[${questionIndex}].QuestionText" required />
+
+                    <label>Question Type:</label>
+                    <select name="Questions[${questionIndex}].QuestionType" onchange="toggleQuestionInput(this)">
+                        <option value="MCQ">Multiple Choice (MCQ)</option>
+                        <option value="Essay">Essay</option>
+                    </select>
+
+                    <div class="choices">
+                        <label>Choices:</label>
+                        <div class="choice">
+                            <input type="text" name="Questions[${questionIndex}].ChoseDTOs[0].Text" required />
+                            <button type="button" onclick="removeChoice(this)">Remove</button>
+                        </div>
+                    </div>
+
+                    <button type="button" class="add-choice-btn" onclick="addChoice(this)">Add Choice</button>
+                    <button type="button" onclick="removeQuestion(this)">Remove Question</button>
+                `;
+        questionsDiv.appendChild(div);
+        questionIndex++;
+    }
+
+    function addChoice(button) {
+        let questionDiv = button.closest(".question");
+        let choicesDiv = questionDiv.querySelector(".choices");
+        let choiceIndex = choicesDiv.querySelectorAll(".choice").length;
+        let questionNumber = Array.from(questionDiv.parentElement.children).indexOf(questionDiv);
+
+        let div = document.createElement("div");
+        div.classList.add("choice");
+        div.innerHTML = `
+                    <input type="text" name="Questions[${questionNumber}].ChoseDTOs[${choiceIndex}].Text" required />
+                    <button type="button" onclick="removeChoice(this)">Remove</button>
+                `;
+        choicesDiv.appendChild(div);
+    }
+
+    function removeChoice(button) {
+        button.parentElement.remove();
+    }
+
+    function removeQuestion(button) {
+        button.parentElement.remove();
+    }
+
+    function toggleQuestionInput(selectElement) {
+        let questionDiv = selectElement.closest(".question");
+        let choicesDiv = questionDiv.querySelector(".choices");
+        let addChoiceBtn = questionDiv.querySelector(".add-choice-btn");
+
+        if (selectElement.value === "Essay") {
+            choicesDiv.style.display = "none";
+            addChoiceBtn.style.display = "none";
+
+            // 🚀 **Fix: Remove existing choices for Essay questions**
+            let choiceInputs = choicesDiv.querySelectorAll("input");
+            choiceInputs.forEach(input => input.remove());
+        } else {
+            choicesDiv.style.display = "block";
+            addChoiceBtn.style.display = "block";
+        }
+    }
+</script>

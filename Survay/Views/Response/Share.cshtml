@@ -1,0 +1,64 @@
+﻿<style>
+.survey-link {
+    display: flex;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 50%;
+    margin: 20px auto;
+}
+
+/* Input field styling */
+#surveyLink {
+    flex-grow: 1;
+    font-size: 16px;
+    padding: 5px;
+    background: transparent;
+    outline: none;
+    color: #333;
+}
+
+/* Copy button */
+.copy-button {
+    background: #007bff;
+    color: white;
+    padding: 8px 12px;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+    transition: background 0.3s;
+}
+
+.copy-button:hover {
+    background: #0056b3;
+}
+</style>
+
+<h3> Share this link </h3>
+<div class="survey-link">
+    <input type="text" id="surveyLink" value="@ViewBag.SurveyUrl" readonly style="border: none; width: 80%;">
+    <span class="copy-button" onclick="copyToClipboard()">Copy URL</span>
+</div>
+
+<script>
+    function copyToClipboard() {
+        let copyText = document.getElementById("surveyLink");
+
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value)
+            .then(() => {
+                alert("Survey URL copied to clipboard!");
+            })
+            .catch(err => {
+                console.error("Failed to copy: ", err);
+            });
+    }
+</script>

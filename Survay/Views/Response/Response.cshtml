@@ -1,0 +1,100 @@
+﻿@model Survay.Models.DTO.servayDTO
+
+<style>
+    form {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    input[type="text"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .question {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #f9f9f9;
+    }
+
+        .question div {
+            margin-top: 8px;
+        }
+
+    input[type="radio"] {
+        margin-right: 8px;
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        background: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease-in-out;
+    }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+</style>
+
+<form asp-action="SubmitResponse" asp-controller="Response" method="post">
+    <input type="hidden" asp-for="SurveyID" />
+
+    <div id="questions">
+        @for (int i = 0; i < Model.Questions.Count; i++)
+        {
+            <div class="question">
+                <input type="hidden" name="Answers[@i].QuestionID" value="@Model.Questions[i].QuestionID" />
+
+                <label>@Model.Questions[i].QuestionText</label>
+
+                @foreach (var choice in Model.Questions[i].choseDTOs)
+                {
+                    <div>
+                        <input type="radio" name="Answers[@i].OptionID" value="@choice.Id" required />
+                        <label>@choice.Text</label>
+                    </div>
+                }
+
+                @if (Model.Questions[i].QuestionType == "Essay")
+                {
+                    <textarea name="Answers[@i].AnswerText"></textarea>
+                }
+            </div>
+        }
+    </div>
+
+    <button type="submit">Submit Response</button>
+</form>
