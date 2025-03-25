@@ -35,16 +35,16 @@ namespace Survay.Controllers
 
         #region Create
         [HttpGet()]
-        public IActionResult Create(servayDTO servayDTO)
+        public IActionResult Create(serveyDTO servayDTO)
         {
             return View(servayDTO);
         }
         #endregion
 
         #region add Surveys
-        public IActionResult SubmitSurvey(servayDTO surveyDto)
+        public IActionResult SubmitSurvey(serveyDTO surveyDto)
         {
-            Servay survey = helper.ConvertToSurvey(surveyDto);
+            Servey survey = helper.ConvertToSurvey(surveyDto);
 
             survey.UserID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 

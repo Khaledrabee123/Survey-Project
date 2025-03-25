@@ -3,6 +3,6 @@ using Survay.Models.DTO;
 
 namespace Survay.CQRS.Query
 {
-    public record GetSurvayToEditQuery(int SurvayId):IRequest<servayDTO>;
+    public record GetSurvayToEditQuery(int SurvayId):IRequest<serveyDTO>;
     
 }

@@ -7,7 +7,7 @@ using Survay.Models.DTO;
 
 namespace Survay.CQRS.Handler
 {
-    public class GetSurvayToEditHandler : IRequestHandler<GetSurvayToEditQuery, servayDTO>
+    public class GetSurvayToEditHandler : IRequestHandler<GetSurvayToEditQuery, serveyDTO>
     {
         db db;
         public GetSurvayToEditHandler(db db)
@@ -15,7 +15,7 @@ namespace Survay.CQRS.Handler
             this.db = db;
         }
 
-        public async Task<servayDTO> Handle(GetSurvayToEditQuery request, CancellationToken cancellationToken)
+        public async Task<serveyDTO> Handle(GetSurvayToEditQuery request, CancellationToken cancellationToken)
         {
 
            
@@ -23,7 +23,7 @@ namespace Survay.CQRS.Handler
 .               Where(e => e.SurveyID == request.SurvayId)
 .               Include(s => s.Questions)
                .ThenInclude(q => q.Choices)
-               .Select(s => new servayDTO
+               .Select(s => new serveyDTO
                 {
                     SurveyID = s.SurveyID,
                     UserID = s.UserID,

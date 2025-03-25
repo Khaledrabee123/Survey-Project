@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using WebApplication3.Models.WebApplication3.Models;
 using System.Reflection.Emit;
-using Survay.Models.DTO;
+using Survay.Models.DTOs;
 
 namespace Survay.Models.database
 {
@@ -24,7 +24,7 @@ namespace Survay.Models.database
             optionsBuilder.UseSqlServer("Data Source =DESKTOP-T3ABVVQ\\MSSQLSERVER01;Initial Catalog =survay;Integrated Security=true;TrustServerCertificate=True;Encrypt=False");
         }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Servay> Surveys { get; set; }
+        public virtual DbSet<Servey> Surveys { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Choice> choses { get; set; }
         public virtual DbSet<Response> Responses { get; set; }
@@ -37,7 +37,7 @@ namespace Survay.Models.database
             base.OnModelCreating(builder); // Important for Identity
 
             // User - Survey (1 to Many)
-            builder.Entity<Servay>()
+            builder.Entity<Servey>()
                 .HasOne(s => s.Creator)
                 .WithMany(u => u.CreatedSurveys)
                 .HasForeignKey(s => s.UserID) // Fixed foreign key
@@ -86,7 +86,6 @@ namespace Survay.Models.database
                 .HasForeignKey(a => a.OptionID)
                 .OnDelete(DeleteBehavior.Cascade);
         }
-        public DbSet<Survay.Models.DTO.servayQDTO> servayQDTO { get; set; } = default!;
 
 
     }

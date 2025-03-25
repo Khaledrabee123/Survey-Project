@@ -27,9 +27,9 @@ namespace WebApplication3.Models
                 }).ToList()
             };
         }
-        public static Servay ConvertToSurvey(servayDTO surveyDto)
+        public static Servey ConvertToSurvey(serveyDTO surveyDto)
         {
-            return new Servay
+            return new Servey
             {
                 SurveyID = surveyDto.SurveyID,
                 Title = surveyDto.Title,

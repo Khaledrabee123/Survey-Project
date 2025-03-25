@@ -14,7 +14,7 @@ namespace Survay.Models.database
         public DateTime CreatedAt { get; set; }
 
         public int? SurveyID { get; set; }
-        public Servay? Survey { get; set; }
+        public Servey? Survey { get; set; }
 
         public ICollection<Choice>? Choices { get; set; }
     }

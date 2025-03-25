@@ -5,7 +5,7 @@ namespace WebApplication3.Models
 {
     namespace WebApplication3.Models
     {
-        public class Servay
+        public class Servey
 		{
 			[Required]	
 			[Key]

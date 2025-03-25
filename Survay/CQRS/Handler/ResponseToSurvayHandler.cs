@@ -6,7 +6,7 @@ using Survay.Models.DTO;
 
 namespace Survay.CQRS.Handler
 {
-    public class ResponseToSurvayHandler : IRequestHandler<ResponseToSurvayQuery, servayDTO>
+    public class ResponseToSurvayHandler : IRequestHandler<ResponseToSurvayQuery, serveyDTO>
     {
         db db;
 
@@ -15,13 +15,13 @@ namespace Survay.CQRS.Handler
             this.db = db;
         }
 
-        public async Task<servayDTO> Handle(ResponseToSurvayQuery request, CancellationToken cancellationToken)
+        public async Task<serveyDTO> Handle(ResponseToSurvayQuery request, CancellationToken cancellationToken)
         {
             var s = await db.Surveys
         .Where(e => e.SurveyID == request.SurveyId)
         .Include(s => s.Questions)
         .ThenInclude(q => q.Choices)
-        .Select(s => new servayDTO
+        .Select(s => new serveyDTO
          {
              SurveyID = s.SurveyID,
              UserID = s.UserID,
