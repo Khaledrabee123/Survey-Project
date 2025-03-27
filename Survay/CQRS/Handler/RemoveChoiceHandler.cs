@@ -2,22 +2,22 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Survay.CQRS.Command;
 using Survay.Models.database;
+using Survay.Services.ChoiceServices;
 
 namespace Survay.CQRS.Handler
 {
     public class RemoveChoiceHandler : IRequestHandler<RemoveChoiceCommand>
     {
-        db db;
+        IChoiceServices choiceServices;
 
-        public RemoveChoiceHandler(db db)
+        public RemoveChoiceHandler(IChoiceServices choiceServices)
         {
-            this.db = db;
+            this.choiceServices = choiceServices;
         }
 
         public Task Handle(RemoveChoiceCommand request, CancellationToken cancellationToken)
         {
-            db.Remove(request.Choice);
-            db.SaveChanges();
+            choiceServices.Remove(request.Choice);
             return Task.CompletedTask;
         }
     }

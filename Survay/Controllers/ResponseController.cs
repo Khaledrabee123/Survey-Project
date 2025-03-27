@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Survay.CQRS.Command;
 using Survay.CQRS.Query;
+using Survay.DTOs;
 using Survay.Models.database;
-using Survay.Models.DTO;
 using WebApplication3.Models;
 
 namespace Survay.Controllers
@@ -40,13 +40,13 @@ namespace Survay.Controllers
         
         public async Task <IActionResult> Response(int id)
         {
-            var s =await mediator.Send(new ResponseToSurvayQuery(id)); 
+            var s =await mediator.Send(new ResponseToSurveyQuery(id)); 
             return View(s);
         }
         #endregion
 
         #region SubmitResponse
-        public IActionResult SubmitResponse(ResponceDTO responceDTO)
+        public IActionResult SubmitResponse(ResponseDTO responceDTO)
         {
 
             Response UserResponse = helper.MapToResponse(responceDTO);

@@ -1,23 +1,23 @@
 ﻿using MediatR;
 using Survay.CQRS.Command;
 using Survay.Models.database;
+using Survay.Services.SurvayServices;
 
 namespace Survay.CQRS.Handler
 {
     public class AddSurveyHandler : IRequestHandler<AddSurveyCommand>
     {
-        db db;
 
-        public AddSurveyHandler(db db)
+        ISurveyServices surveyServices;
+        public AddSurveyHandler(ISurveyServices surveyServices)
         {
-            this.db = db;
+            this.surveyServices = surveyServices;
         }
 
         public Task Handle(AddSurveyCommand request, CancellationToken cancellationToken)
         {
-            db.Surveys.Add(request.Survay);
-            db.SaveChanges();
-            return Task.CompletedTask;
+           return surveyServices.AddSurveyAsync(request.Survay);
+            
         }
     }
 }

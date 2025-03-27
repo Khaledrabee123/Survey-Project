@@ -1,25 +1,23 @@
 ﻿using MediatR;
 using Survay.CQRS.Command;
 using Survay.Models.database;
-using Survay.Models.DTO;
+using Survay.Services.ResponsesServices;
 
 namespace Survay.CQRS.Handler
 {
     public class AddResponseHandler : IRequestHandler<AddResponseCommand>
     {
-        db db;
+        IResponceSerivce responceSerivce;
 
-        public AddResponseHandler(db db)
+        public AddResponseHandler(IResponceSerivce responceSerivce)
         {
-            this.db = db;
+            this.responceSerivce = responceSerivce;
         }
 
         public Task Handle(AddResponseCommand request, CancellationToken cancellationToken)
         {
-            var ResponseList = db.Surveys.FirstOrDefault(r => r.SurveyID == request.response.SurveyID);
-            ResponseList.Responses.Add(request.response);
-            db.Update(ResponseList);
-            db.SaveChanges();
+
+            responceSerivce.add(request.response);
             return Task.CompletedTask; 
         }
     }

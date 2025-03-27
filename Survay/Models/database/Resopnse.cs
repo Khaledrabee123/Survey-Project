@@ -11,7 +11,7 @@ namespace Survay.Models.database
         public DateTime SubmittedAt { get; set; }
 
         public int SurveyID { get; set; }
-        public Servey Survey { get; set; }
+        public Survey Survey { get; set; }
 
         public string UserID { get; set; }
         [Required]

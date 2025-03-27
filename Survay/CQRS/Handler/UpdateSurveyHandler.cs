@@ -2,36 +2,25 @@
 using Newtonsoft.Json.Linq;
 using Survay.CQRS.Command;
 using Survay.Models.database;
+using Survay.Services.SurvayServices;
 using WebApplication3.Models.WebApplication3.Models;
 
 namespace Survay.CQRS.Handler
 {
     public class UpdateSurveyHandler : IRequestHandler<UpdateSurveyCommand, bool>
     {
-        db db;
-
-        public UpdateSurveyHandler(db db)
+       
+        ISurveyServices surveyServices;
+        public UpdateSurveyHandler(ISurveyServices surveyServices)
         {
-            this.db = db;
+            this.surveyServices = surveyServices;
         }
 
         public async Task<bool> Handle(UpdateSurveyCommand request, CancellationToken cancellationToken)
         {
-             var survey = await db.Surveys.FindAsync(request.SurveyId);
-            if (survey == null)
-                return false;
 
-            if (request.field == "Title")
-                survey.Title = request.Value;
-            else if (request.field == "Description")
-                survey.Description = request.Value;
-            else
-                return false;
+            return await surveyServices.UpdateSurveyAsync(request.SurveyId, request.field, request.Value);
 
-            db.SaveChanges();
-
-            return true;
-            
         }
     }
 }

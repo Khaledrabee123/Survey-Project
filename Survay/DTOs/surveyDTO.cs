@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Survay.Models.DTO
+namespace Survay.DTOs
 {
-    public class serveyDTO
+    public class surveyDTO
     {
         [Key]
         [Required]
@@ -15,6 +15,6 @@ namespace Survay.Models.DTO
         public DateTime CreatedAt { get; set; }
         public List<QuestionDTO>? Questions { get; set; }
         [NotMapped]
-        public List<ResponceDTO>? Responses { get; set; }
+        public List<ResponseDTO>? Responses { get; set; }
     }
 }

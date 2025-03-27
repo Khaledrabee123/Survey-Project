@@ -5,7 +5,7 @@ namespace WebApplication3.Models
 {
     namespace WebApplication3.Models
     {
-        public class Servey
+        public class Survey
 		{
 			[Required]	
 			[Key]

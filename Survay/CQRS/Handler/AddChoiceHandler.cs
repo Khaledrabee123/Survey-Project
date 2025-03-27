@@ -2,29 +2,32 @@
 using Microsoft.EntityFrameworkCore;
 using Survay.CQRS.Command;
 using Survay.Models.database;
+using Survay.Services.ChoiceServices;
+using Survay.Services.QusetionServices;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Survay.CQRS.Handler
 {
-    public class AddChoiceHandler : IRequestHandler<AddChoiceCommand, int>
+    public class AddChoiceToQuestionHandler : IRequestHandler<AddChoiceToQuestionCommand, int>
     {
-        db db;
+        IChoiceServices choiceServices;
+        IQusetionServices qusetionServices;
 
-        public AddChoiceHandler(db db)
+        public AddChoiceToQuestionHandler(IChoiceServices choiceServices, IQusetionServices qusetionServices)
         {
-            this.db = db;
+            this.choiceServices = choiceServices;
+            this.qusetionServices = qusetionServices;
         }
 
-        public async Task<int> Handle(AddChoiceCommand request, CancellationToken cancellationToken)
+
+        public async Task<int> Handle(AddChoiceToQuestionCommand request, CancellationToken cancellationToken)
         {
-            var question =await db.Questions.Include(q => q.Choices).FirstOrDefaultAsync(q => q.QuestionID == request.questionId);
 
-            var newChoice = new Choice { OptionText = request.text };
+            var newChoice = choiceServices.MakeChoice(request.text);
+            
+            await qusetionServices.AddChoice(request.questionId, newChoice);
 
-            question.Choices.Add(newChoice);
-
-            db.SaveChanges();
-
+            
             return newChoice.OptionID;
 
 

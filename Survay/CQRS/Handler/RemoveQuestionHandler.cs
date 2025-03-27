@@ -2,29 +2,24 @@
 using Microsoft.EntityFrameworkCore;
 using Survay.CQRS.Command;
 using Survay.Models.database;
+using Survay.Services.QusetionServices;
 
 namespace Survay.CQRS.Handler
 {
     public class RemoveQuestionHandler : IRequestHandler<RemoveQuestionCommand, bool>
     {
-        db db;
+        IQusetionServices qusetionServices;
 
-        public RemoveQuestionHandler(db db)
+        public RemoveQuestionHandler(IQusetionServices qusetionServices)
         {
-            this.db = db;
+            this.qusetionServices = qusetionServices;
         }
+
+      
 
         public async Task<bool> Handle(RemoveQuestionCommand request, CancellationToken cancellationToken)
         {
-            var question =await db.Questions.Include(q => q.Choices).FirstOrDefaultAsync(q => q.QuestionID == request.QusetionId);
-            if (question == null)
-            {
-                return false;
-            }
-
-            db.choses.RemoveRange(question.Choices);
-            db.Questions.Remove(question);
-            db.SaveChanges();
+            await qusetionServices.Remove(request.QusetionId);
 
             return true;
         }

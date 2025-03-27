@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
+using Survay.DTOs;
 using Survay.Models.database;
-using Survay.Models.DTO;
 using WebApplication3.Models.WebApplication3.Models;
 
 namespace WebApplication3.Models
@@ -9,7 +9,7 @@ namespace WebApplication3.Models
     public class helper
     {
         private readonly IMemoryCache _cache;
-        public static Response MapToResponse(ResponceDTO dto)
+        public static Response MapToResponse(ResponseDTO dto)
         {
             return new Response
             {
@@ -27,9 +27,9 @@ namespace WebApplication3.Models
                 }).ToList()
             };
         }
-        public static Servey ConvertToSurvey(serveyDTO surveyDto)
+        public static Survey ConvertToSurvey(surveyDTO surveyDto)
         {
-            return new Servey
+            return new Survey
             {
                 SurveyID = surveyDto.SurveyID,
                 Title = surveyDto.Title,

@@ -1,21 +1,24 @@
 ﻿using MediatR;
 using Survay.CQRS.Query;
 using Survay.Models.database;
+using Survay.Services.ChoiceServices;
 
 namespace Survay.CQRS.Handler
 {
     public class IsChoiceHasAnswersHandler : IRequestHandler<IsChoiceHasAnswersQuery, bool>
     {
-        db db;
+        IChoiceServices choiceServices;
 
-        public IsChoiceHasAnswersHandler(db db)
+        public IsChoiceHasAnswersHandler(IChoiceServices choiceServices)
         {
-            this.db = db;
+            this.choiceServices = choiceServices;
         }
+
+        
 
         public async Task<bool> Handle(IsChoiceHasAnswersQuery request, CancellationToken cancellationToken)
         {
-           return  db.Answers.Any(a => a.OptionID == request.choiceId);
+            return choiceServices.IsChoiceHasAnswersQuery(request.choiceId);
             
         }
     }

@@ -2,6 +2,6 @@
 
 namespace Survay.CQRS.Command
 {
-    public record AddChoiceCommand(int questionId, string text):IRequest<int>;
+    public record AddChoiceToQuestionCommand(int questionId, string text):IRequest<int>;
     
 }

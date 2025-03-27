@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WebApplication3.Models.WebApplication3.Models;
 
-namespace Survay.Models.DTO
+namespace Survay.DTOs
 {
-    public class ResponceDTO
+    public class ResponseDTO
     {
         [Key]
         [Required]

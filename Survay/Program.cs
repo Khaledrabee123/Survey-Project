@@ -3,6 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Survay.Models.database;
 using MediatR;
 using Serilog;
+using Survay.Repositores.Surveyrepo;
+using Survay.Services.SurvayServices;
+using Survay.Repositores.ChoiceRepo;
+using Survay.Services.ChoiceServices;
+using Survay.Repositores.QuserionRepo;
+using Survay.Services.QusetionServices;
+using Survay.Repositores.ResponseRepo;
+using Survay.Services.ResponsesServices;
 
 namespace Survay
 {
@@ -15,6 +23,18 @@ namespace Survay
 			builder.Services.AddControllersWithViews();
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly));
             builder.Services.AddMemoryCache();
+
+            builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
+            builder.Services.AddScoped<ISurveyServices, SurveyService>();
+
+            builder.Services.AddScoped<IChoiceRepository, ChoiceRepository>();
+            builder.Services.AddScoped<IChoiceServices, ChoiceServices>();
+
+            builder.Services.AddScoped<IQuestionRepository, QusetionRepository>();
+            builder.Services.AddScoped<IQusetionServices, QusetionService>();
+
+            builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
+            builder.Services.AddScoped<IResponceSerivce, ResponceSerivce>();
 
 
             builder.Services.AddSerilog();

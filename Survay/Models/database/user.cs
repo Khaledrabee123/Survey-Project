@@ -6,7 +6,7 @@ namespace Survay.Models.database
     public class User : IdentityUser
     {
 
-        public ICollection<Servey> CreatedSurveys { get; set; }
+        public ICollection<Survey> CreatedSurveys { get; set; }
         public ICollection<Response> Responses { get; set; }
     }
 }

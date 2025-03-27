@@ -2,30 +2,29 @@
 using Microsoft.EntityFrameworkCore;
 using Survay.CQRS.Command;
 using Survay.Models.database;
+using Survay.Repositores.QuserionRepo;
+using Survay.Services.QusetionServices;
+using Survay.Services.SurvayServices;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Survay.CQRS.Handler
 {
-    public class AddQuestionHandler : IRequestHandler<AddQuestionCommand, int>
+    public class AddQuestionToSurveytHandler : IRequestHandler<AddQuestionToSurveyCommand, int>
     {
-        db db ;
-
-        public AddQuestionHandler(db db)
+        ISurveyServices surveyServices ;
+        IQusetionServices qusetionServices;
+        public AddQuestionToSurveytHandler(ISurveyServices surveyServices, IQusetionServices qusetionServices)
         {
-            this.db = db;
+            this.surveyServices = surveyServices;
+            this.qusetionServices = qusetionServices;
         }
 
-        public async Task<int> Handle(AddQuestionCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(AddQuestionToSurveyCommand request, CancellationToken cancellationToken)
         {
-            var newQuestion = new Question
-            {
-                QuestionText = request.Text,
-                QuestionType = "MCQ", // Default type
-                Choices = new List<Choice>() // Empty choices initially
-            };
-            var su = await db.Surveys.Include(e => e.Questions).FirstOrDefaultAsync(e => e.SurveyID == request.SurvayId);
-            su.Questions.Add(newQuestion);
-            db.SaveChanges();
+            var newQuestion = qusetionServices.make(request.Text);
+
+            await surveyServices.AddQuestion(request.SurvayId, newQuestion);
+            
             return newQuestion.QuestionID;
         }
     }

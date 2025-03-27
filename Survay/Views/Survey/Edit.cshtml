@@ -1,4 +1,4 @@
-﻿@model Survay.Models.DTO.serveyDTO
+﻿@model Survay.DTOs.surveyDTO
 
 @{
     ViewData["Title"] = "Edit Survey";
@@ -275,7 +275,7 @@
     }
     function updateQuestion(questionId, field, value) {
         $.ajax({
-            url: `/Survey/UpdateQuestion`,
+            url: `/Question/UpdateQuestion`,
             type: "POST",
             data: { questionId: questionId, field: field, value: value },
             success: function () {
@@ -289,7 +289,7 @@
 
     function updateChoice(choiceId, newText) {
         $.ajax({
-            url: `/Survey/UpdateChoice`,
+            url: `/Choice/UpdateChoice`,
             type: "POST",
             data: { choiceId: choiceId, newText: newText },
             success: function () {
@@ -312,7 +312,7 @@
         }
 
         $.ajax({
-            url: `/Survey/AddQuestion?surveyId=${surveyId}&text=${encodeURIComponent(questionText)}`,
+            url: `/Question/AddQuestion?surveyId=${surveyId}&text=${encodeURIComponent(questionText)}`,
             type: "POST",
             success: function (response) {
                 let questionIndex = $(".question").length;
@@ -356,7 +356,7 @@
         }
 
         $.ajax({
-            url: `/Survey/DeleteQuestion?questionId=${questionId}`,
+            url: `/Question/DeleteQuestion?questionId=${questionId}`,
             type: "POST",
             success: function () {
                 questionDiv.remove();
@@ -377,7 +377,7 @@
         }
 
         $.ajax({
-            url: `/Survey/AddChoice?questionId=${questionId}&text=${encodeURIComponent(choiceText)}`,
+            url: `/Choice/AddChoice?questionId=${questionId}&text=${encodeURIComponent(choiceText)}`,
             type: "POST",
             success: function (response) {
                 let newChoiceHtml = `
@@ -400,7 +400,7 @@
         }
 
         $.ajax({
-            url: `/Survey/RemoveChoice?choiceId=${choiceId}`,
+            url: `/Choice/RemoveChoice?choiceId=${choiceId}`,
             type: "POST",
             success: function () {
                 choiceDiv.remove();

@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Survay.Models.DTO
+namespace Survay.DTOs
 {
     public class QuestionDTO
     {
         [Key]
         [Required]
-        
+
         public int QuestionID { get; set; }
         public int QuestionNumber { get; set; }
         public string? QuestionText { get; set; }

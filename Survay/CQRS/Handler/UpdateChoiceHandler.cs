@@ -3,24 +3,25 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
 using Survay.CQRS.Command;
 using Survay.Models.database;
+using Survay.Repositores.ChoiceRepo;
+using Survay.Services.ChoiceServices;
 
 namespace Survay.CQRS.Handler
 {
     public class UpdateChoiceHandler : IRequestHandler<UpdateChoiceCommand>
     {
-        db db;
+        IChoiceServices choiceServices;
 
-        public UpdateChoiceHandler(db db)
+        public UpdateChoiceHandler(IChoiceServices choiceServices)
         {
-            this.db = db;
+            this.choiceServices = choiceServices;
         }
+
+        
 
         public async Task Handle(UpdateChoiceCommand request, CancellationToken cancellationToken)
         {
-            var choice =await db.choses.FirstOrDefaultAsync(c => c.OptionID == request.choiceId);
-            choice.OptionText = request.newText;
-            db.SaveChanges();
-            return;
+            await choiceServices.Update(request.choiceId, request.newText);
         }
     }
 }

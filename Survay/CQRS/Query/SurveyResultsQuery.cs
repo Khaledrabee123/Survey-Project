@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Survay.Models.DTOs;
 using System.Collections.Generic;
 
 namespace Survay.CQRS.Query

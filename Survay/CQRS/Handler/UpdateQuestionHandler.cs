@@ -3,37 +3,25 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Survay.CQRS.Command;
 using Survay.Models.database;
+using Survay.Services.QusetionServices;
 
 namespace Survay.CQRS.Handler
 {
     public class UpdateQuestionHandler : IRequestHandler<UpdateQuestionCommand, bool>
     {
-        db db;
 
-        public UpdateQuestionHandler(db db)
+        IQusetionServices qusetionServices;
+
+        public UpdateQuestionHandler(IQusetionServices qusetionServices)
         {
-            this.db = db;
+            this.qusetionServices = qusetionServices;
         }
 
+       
         public async Task<bool> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
         {
-            var question =await db.Questions.FirstOrDefaultAsync(q => q.QuestionID == request.QuestionId);
-            if (question == null)
-            {
-                return false;
-            }
 
-            if (request.field == "text")
-            {
-                question.QuestionText = request.Value;
-            }
-            else if (request.field == "type")
-            {
-                question.QuestionType = request.Value;
-            }
-
-            db.SaveChanges();
-
+            await qusetionServices.Update(request.QuestionId, request.field, request.Value);
             return true;
 
         }

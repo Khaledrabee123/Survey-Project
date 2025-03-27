@@ -2,21 +2,24 @@
 using Microsoft.EntityFrameworkCore;
 using Survay.CQRS.Query;
 using Survay.Models.database;
+using Survay.Services.ChoiceServices;
 
 namespace Survay.CQRS.Handler
 {
     public class GetChoiceByIdHandler : IRequestHandler<GetChoiceByIdQuery, Choice>
     {
-        db db;
+        IChoiceServices choiceServices;
 
-        public GetChoiceByIdHandler(db db)
+        public GetChoiceByIdHandler(IChoiceServices choiceServices)
         {
-            this.db = db;
+            this.choiceServices = choiceServices;
         }
+
+     
 
         public async Task<Choice> Handle(GetChoiceByIdQuery request, CancellationToken cancellationToken)
         {
-            return await db.choses.FirstOrDefaultAsync(c=>c.OptionID== request.ChoiceId);
+            return await choiceServices.Get(request.ChoiceId);
         }
     }
 }

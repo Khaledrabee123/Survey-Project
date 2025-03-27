@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Survay.Models.DTO
+namespace Survay.DTOs
 {
     public class answerDTO
     {
