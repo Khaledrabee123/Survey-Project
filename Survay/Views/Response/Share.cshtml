@@ -1,64 +1,66 @@
 ﻿<style>
-.survey-link {
-    display: flex;
-    align-items: center;
-    background: #f9f9f9;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 50%;
-    margin: 20px auto;
-}
+    .survey-share {
+        max-width: 500px;
+        margin: 20px auto;
+        text-align: center;
+    }
 
-/* Input field styling */
-#surveyLink {
-    flex-grow: 1;
-    font-size: 16px;
-    padding: 5px;
-    background: transparent;
-    outline: none;
-    color: #333;
-}
+    .survey-link-box {
+        display: flex;
+        margin-top: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        overflow: hidden;
+    }
 
-/* Copy button */
-.copy-button {
-    background: #007bff;
-    color: white;
-    padding: 8px 12px;
-    margin-left: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    user-select: none;
-    transition: background 0.3s;
-}
+    #surveyLink {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        font-size: 14px;
+        background: #f8f9fa;
+    }
 
-.copy-button:hover {
-    background: #0056b3;
-}
+    .copy-btn {
+        padding: 10px 15px;
+        background: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        .copy-btn:hover {
+            background: #0069d9;
+        }
+
+    .copied {
+        background: #28a745 !important;
+    }
 </style>
 
-<h3> Share this link </h3>
-<div class="survey-link">
-    <input type="text" id="surveyLink" value="@ViewBag.SurveyUrl" readonly style="border: none; width: 80%;">
-    <span class="copy-button" onclick="copyToClipboard()">Copy URL</span>
+<div class="survey-share">
+    <h4>Share this survey</h4>
+    <div class="survey-link-box">
+        <input type="text" id="surveyLink" value="@ViewBag.SurveyUrl" readonly>
+        <button class="copy-btn" onclick="copyLink()">Copy</button>
+    </div>
 </div>
 
 <script>
-    function copyToClipboard() {
-        let copyText = document.getElementById("surveyLink");
+    function copyLink() {
+        const input = document.getElementById("surveyLink");
+        const btn = document.querySelector(".copy-btn");
 
-        // Select the text field
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); // For mobile devices
+        input.select();
+        document.execCommand("copy");
 
-        // Copy the text inside the text field
-        navigator.clipboard.writeText(copyText.value)
-            .then(() => {
-                alert("Survey URL copied to clipboard!");
-            })
-            .catch(err => {
-                console.error("Failed to copy: ", err);
-            });
+        btn.textContent = "Copied!";
+        btn.classList.add("copied");
+
+        setTimeout(() => {
+            btn.textContent = "Copy";
+            btn.classList.remove("copied");
+        }, 2000);
     }
 </script>

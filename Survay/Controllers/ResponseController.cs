@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Survay.CQRS.Command;
-using Survay.CQRS.Query;
+using Survay.CQRS.Command.ResponseCommnds;
+using Survay.CQRS.Query.ResponseQuerys;
 using Survay.DTOs;
 using Survay.Models.database;
 using WebApplication3.Models;

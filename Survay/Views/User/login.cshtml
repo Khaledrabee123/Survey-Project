@@ -1,81 +1,158 @@
 ﻿@model Survay.DTOs.UserLoginDTO
 
 @{
-	ViewData["Title"] = "login";
+    ViewData["Title"] = "login";
 }
 
-<h1>login</h1>
+<h1 class="text-center title">Login</h1>
 <hr />
-<div class="row">
-	<div class="col-md-4">
-		<form asp-action="login">
-			<div asp-validation-summary="All" class="text-danger"></div>
-			<div class="form-group">
-				<label asp-for="Username" class="control-label"></label>
-				<input asp-for="Username" class="form-control" />
-				<span asp-validation-for="Username" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Password" class="control-label"></label>
-				<input asp-for="Password" class="form-control" />
-				<span asp-validation-for="Password" class="text-danger"></span>
-			</div>
-			<div class="form-group form-check">
-				<label class="form-check-label">
-					<input class="form-check-input" asp-for="RememberMe" /> @Html.DisplayNameFor(model => model.RememberMe)
-				</label>
-			</div>
-			<div class="form-group">
-				<input type="submit" value="login" class="btn btn-primary" />
-			</div>
-		</form>
+<div class="container d-flex justify-content-center">
+    <div class="login-box p-4 shadow-lg">
+        <form asp-action="login">
+            <div asp-validation-summary="All" class="text-danger"></div>
 
+            <div class="form-group">
+                <label asp-for="Username" class="control-label">Username</label>
+                <input asp-for="Username" class="form-control input-style" placeholder="Enter your username" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
 
-		<div class="row">
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control input-style" placeholder="Enter your password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
 
-			<div class="col-md-4">
-				<h1>External Login</h1>
-				<hr />
-				@{
-					if (Model.Schemes?.Count() == 0)
-					{
-						<div>No external logins configured</div>
-					}
-					else
-					{
-						<form asp-action="ExternalLogin">
-							<div>
-								@foreach (var provider in Model.Schemes)
-								{<button type="submit" class="btn btn-light btn-block" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
-                                        @{
-                                            string imageSrc = string.Empty;
-                                            if (provider.DisplayName == "Google")
-                                                imageSrc = "https://gfx4arab.com/wp-content/uploads/2020/06/google-icon.svg";
-                                            else if (provider.DisplayName == "Facebook")
-                                                imageSrc = "https://cdn.freebiesupply.com/logos/large/2x/facebook-3-logo-png-transparent.png";
-                                            else if (provider.DisplayName == "Microsoft")
-                                                imageSrc = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Microsoft_Store_logo.svg/1200px-Microsoft_Store_logo.svg.png";
-                                        }
-                                        <img src="@imageSrc" alt="@provider.DisplayName" style="height: 20px;" />
-                                        Login With @provider.DisplayName
-                                    </button>
-								}
-							</div>
-						</form>
-					}
-				}
+            <div class="form-group form-check">
+                <input class="form-check-input" asp-for="RememberMe" />
+                <label class="form-check-label" asp-for="RememberMe">Remember me</label>
+            </div>
 
-				<div />
+            <div class="form-group text-center">
+                <input type="submit" value="Login" class="btn btn-primary btn-lg btn-block login-btn" />
+            </div>
+        </form>
 
+        <hr />
 
-			</div>
-		</div>
-	</div>
+        @if (Model.Schemes?.Any() == true)
+        {
 
-	
+            <form asp-action="ExternalLogin" class="text-center">
+                @foreach (var provider in Model.Schemes)
+                {
+                    string imageSrc = provider.Name switch
+                    {
+                        "Google" => "https://developers.google.com/identity/images/g-logo.png",
+                        "Facebook" => "https://cdn.freebiesupply.com/logos/large/2x/facebook-3-logo-png-transparent.png",
+                        "Microsoft" => "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Microsoft_Store_logo.svg/1200px-Microsoft_Store_logo.svg.png",
+                        _ => ""
+                    };
 
-	@section Scripts {
-		@{
-			await Html.RenderPartialAsync("_ValidationScriptsPartial");
-		}
-	}
+                    <button type="submit" class="btn external-login-btn shadow-sm" name="provider" value="@provider.Name"
+                            title="Log in using @provider.DisplayName">
+                        @if (!string.IsNullOrEmpty(imageSrc))
+                        {
+                            <img src="@imageSrc" alt="@provider.DisplayName" class="external-login-img" />
+                        }
+                        Login with @provider.DisplayName
+                    </button>
+                }
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-warning text-center mt-3">No external logins configured</div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    /* Overall page styling */
+    .title {
+        font-weight: bold;
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* Login container */
+    .login-box {
+        width: 100%;
+        max-width: 420px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+        padding: 25px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .login-box:hover {
+            transform: scale(1.02);
+        }
+
+    /* Input fields */
+    .input-style {
+        border-radius: 8px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease-in-out;
+        font-size: 1rem;
+    }
+
+        .input-style:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+        }
+
+    /* Login button */
+    .login-btn {
+        border-radius: 25px;
+        padding: 12px;
+        width: 100%;
+        font-weight: bold;
+        font-size: 1.1rem;
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        border: none;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .login-btn:hover {
+            background: linear-gradient(45deg, #0056b3, #003d80);
+            transform: scale(1.05);
+        }
+
+    /* External login buttons */
+    .external-login-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 25px;
+        padding: 12px;
+        width: 100%;
+        max-width: 260px;
+        margin: 10px auto;
+        font-weight: bold;
+        font-size: 1rem;
+        background: #fff;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .external-login-btn:hover {
+            background: #f8f9fa;
+            transform: scale(1.05);
+        }
+
+    /* External login icons */
+    .external-login-img {
+        height: 24px;
+        margin-right: 10px;
+    }
+</style>

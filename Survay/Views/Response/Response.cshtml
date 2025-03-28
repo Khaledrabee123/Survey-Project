@@ -1,100 +1,149 @@
 ﻿@model Survay.DTOs.surveyDTO
 
 <style>
-    form {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    .survey-container {
+        max-width: 650px;
+        margin: 40px auto;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         background: #fff;
-        font-family: Arial, sans-serif;
+        font-family: 'Arial', sans-serif;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .survey-container:hover {
+            transform: scale(1.02);
+        }
+
+    .survey-title {
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
     }
 
     label {
-        font-weight: bold;
+        font-weight: 600;
         display: block;
         margin-bottom: 5px;
-        color: #333;
+        color: #444;
     }
+
+    .question {
+        background: #f8f9fa;
+        padding: 18px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .question:hover {
+            background: #eef2f6;
+            border-color: #007bff;
+        }
 
     input[type="text"],
     textarea {
         width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
+        padding: 12px;
+        margin-top: 8px;
         border: 1px solid #ccc;
-        border-radius: 5px;
+        border-radius: 6px;
         font-size: 14px;
+        transition: all 0.3s ease-in-out;
     }
 
-    textarea {
-        min-height: 100px;
-        resize: vertical;
-    }
-
-    .question {
-        margin-bottom: 20px;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background: #f9f9f9;
-    }
-
-        .question div {
-            margin-top: 8px;
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
         }
 
-    input[type="radio"] {
-        margin-right: 8px;
+    .radio-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
     }
 
-    button {
-        display: block;
+    .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        background: #fff;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+        .radio-option:hover {
+            background: #eef2f6;
+            border-color: #007bff;
+        }
+
+    .submit-btn {
         width: 100%;
-        padding: 12px;
-        font-size: 16px;
+        padding: 14px;
+        font-size: 1.2rem;
         font-weight: bold;
         color: white;
-        background: #007bff;
+        background: linear-gradient(45deg, #007bff, #0056b3);
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
         cursor: pointer;
-        transition: background 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
     }
 
-        button:hover {
-            background: #0056b3;
+        .submit-btn:hover {
+            background: linear-gradient(45deg, #0056b3, #003d80);
+            transform: scale(1.05);
         }
 
+    
+        .radio-group {
+            flex-direction: column;
+        }
+    }
 </style>
 
-<form asp-action="SubmitResponse" asp-controller="Response" method="post">
-    <input type="hidden" asp-for="SurveyID" />
+<div class="survey-container">
+    <h1 class="survey-title">Survey Response</h1>
 
-    <div id="questions">
-        @for (int i = 0; i < Model.Questions.Count; i++)
-        {
-            <div class="question">
-                <input type="hidden" name="Answers[@i].QuestionID" value="@Model.Questions[i].QuestionID" />
+    <form asp-action="SubmitResponse" asp-controller="Response" method="post">
+        <input type="hidden" asp-for="SurveyID" />
 
-                <label>@Model.Questions[i].QuestionText</label>
+        <div id="questions">
+            @for (int i = 0; i < Model.Questions.Count; i++)
+            {
+                <div class="question">
+                    <input type="hidden" name="Answers[@i].QuestionID" value="@Model.Questions[i].QuestionID" />
 
-                @foreach (var choice in Model.Questions[i].choseDTOs)
-                {
-                    <div>
-                        <input type="radio" name="Answers[@i].OptionID" value="@choice.Id" required />
-                        <label>@choice.Text</label>
+                    <label>@Model.Questions[i].QuestionText</label>
+
+                    <div class="radio-group">
+                        @foreach (var choice in Model.Questions[i].choseDTOs)
+                        {
+                            <label class="radio-option">
+                                <input type="radio" name="Answers[@i].OptionID" value="@choice.Id" required />
+                                @choice.Text
+                            </label>
+                        }
                     </div>
-                }
 
-                @if (Model.Questions[i].QuestionType == "Essay")
-                {
-                    <textarea name="Answers[@i].AnswerText"></textarea>
-                }
-            </div>
-        }
-    </div>
+                    @if (Model.Questions[i].QuestionType == "Essay")
+                    {
+                        <textarea name="Answers[@i].AnswerText" placeholder="Write your answer here..."></textarea>
+                    }
+                </div>
+            }
+        </div>
 
-    <button type="submit">Submit Response</button>
-</form>
+        <button type="submit" class="submit-btn">Submit Response</button>
+    </form>
+</div>

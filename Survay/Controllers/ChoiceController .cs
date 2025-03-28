@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
-using Survay.CQRS.Command;
+using Survay.CQRS.Command.ChoiceCommands;
+using Survay.CQRS.Query.ChoiceQuerys;
+
 using Survay.CQRS.Query;
 
 namespace Survay.Controllers

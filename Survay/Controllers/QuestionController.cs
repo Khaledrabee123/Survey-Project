@@ -13,7 +13,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Survay.CQRS.Command;
+using Survay.CQRS.Command.SurvayCommnds;
+using Survay.CQRS.Command.QuserionCommands;
+
 using Survay.CQRS.Query;
 using Survay.Models.database;
 

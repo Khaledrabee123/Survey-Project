@@ -63,11 +63,11 @@ namespace Survay.Controllers
                 {
                     if (IsUsernameUser == null)
                     {
-                        ModelState.AddModelError("Password", "user name must be uniqe");
+                        ModelState.AddModelError("Password", "Email name must be uniqe");
                     }
                     else
                     {
-                        ModelState.AddModelError("Password", "Email name must be uniqe");
+                        ModelState.AddModelError("Password", "user name must be uniqe");
                     }
                 }
             }
@@ -85,6 +85,11 @@ namespace Survay.Controllers
             {
                 Schemes = await SignInManager.GetExternalAuthenticationSchemesAsync(),
             };
+
+            foreach (var scheme in await SignInManager.GetExternalAuthenticationSchemesAsync())
+            {
+                Console.WriteLine($"Provider: {scheme.Name}, DisplayName: {scheme.DisplayName}");
+            }
             return View(login);
 
 
@@ -143,6 +148,7 @@ namespace Survay.Controllers
         public IActionResult ExternalLogin(string provider, string returnUrl = "")
         {
             var redirectUrl = Url.Action("ExternalLoginCallback", "User", new { ReturnUrl = returnUrl });
+
 
             var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 

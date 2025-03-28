@@ -24,18 +24,32 @@ namespace Survay
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly));
             builder.Services.AddMemoryCache();
 
-            builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
-            builder.Services.AddScoped<ISurveyServices, SurveyService>();
+            builder.Services.AddScoped<IWriteSurveyRepository, WriteSurveyRepository>();
+            builder.Services.AddScoped<IWriteSurveyServices, WriteSurveyService>();
 
-            builder.Services.AddScoped<IChoiceRepository, ChoiceRepository>();
-            builder.Services.AddScoped<IChoiceServices, ChoiceServices>();
+            builder.Services.AddScoped<IReadSurveyRepository, ReadSurveyRepository>();
+            builder.Services.AddScoped<IReadSurveyServices, ReadSurveyServices>();
 
-            builder.Services.AddScoped<IQuestionRepository, QusetionRepository>();
-            builder.Services.AddScoped<IQusetionServices, QusetionService>();
 
-            builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
-            builder.Services.AddScoped<IResponceSerivce, ResponceSerivce>();
 
+            builder.Services.AddScoped<IWriteChoiceRepository, WrtieChoiceRepository>();
+            builder.Services.AddScoped<IWriteChoiceServices, WriteChoiceService>();
+
+
+            builder.Services.AddScoped<IReadChoiceRepository, ReadChoiceRepository>();
+            builder.Services.AddScoped<IReadChoiceServices, ReadChoiceServices>();
+
+            builder.Services.AddScoped<IWriteQuestionRepository, WriteQusetionRepository>();
+            builder.Services.AddScoped<IWriteQusetionServices, WriteQusetionService>();
+
+            builder.Services.AddScoped<IReadQusetionRepository, ReadQusestionRepository>();
+            builder.Services.AddScoped<IReadQusetionServices, ReadQusetionService>();
+
+            builder.Services.AddScoped<IReadResponseRepository, ReadResponseRepository>();
+            builder.Services.AddScoped<IReadResponceSerivce, ReadResponceSerivce>();
+
+            builder.Services.AddScoped<IWriteResponseRepository, WriteResponseRepository>();
+            builder.Services.AddScoped<IWriteResponseSerices, WriteResponseSerices>();
 
             builder.Services.AddSerilog();
             builder.Host.UseSerilog((context, configuration) =>

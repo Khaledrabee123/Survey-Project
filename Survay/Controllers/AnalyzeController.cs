@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Survay.CQRS.Query;
+using Survay.CQRS.Query.SurveyQuerys;
+using Survay.CQRS.Query.ResponseQuerys;
+
 using Survay.Models.database;
 
 namespace Survay.Controllers
