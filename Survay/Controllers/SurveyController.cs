@@ -15,7 +15,7 @@ using WebApplication3.Models.WebApplication3.Models;
 namespace Survay.Controllers
 {
 
-    [Authorize]
+    [Authorize()]
     public class SurveyController : Controller
     {
         private readonly IMediator mediator;

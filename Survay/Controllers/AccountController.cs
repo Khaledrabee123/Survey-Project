@@ -11,14 +11,14 @@ using Survay.Models.database;
 
 namespace Survay.Controllers
 {
-    public class UserController : Controller
+    public class AccountController : Controller
     {
         SignInManager<User> SignInManager;
         UserManager<User> UserManager;
-        ILogger<UserController> _logger;
+        ILogger<AccountController> _logger;
         public RoleManager<IdentityRole> RoleManager { get; }
 
-		public UserController(UserManager<User> UserManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, ILogger<UserController> logger)
+		public AccountController(UserManager<User> UserManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, ILogger<AccountController> logger)
 		{
 			this.UserManager = UserManager;
 			SignInManager = signInManager;

@@ -170,13 +170,13 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark @(ViewContext.RouteData.Values["Action"]?.ToString() == "login" ? "active" : "")"
-                                   asp-controller="User" asp-action="login">
+                                   asp-controller="Account" asp-action="login">
                                     <i class="bi bi-box-arrow-in-right"></i> Login
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark @(ViewContext.RouteData.Values["Action"]?.ToString() == "Register" ? "active" : "")"
-                                   asp-controller="User" asp-action="Register">
+                                   asp-controller="Account" asp-action="Register">
                                     <i class="bi bi-person-plus"></i> Register
                                 </a>
                             </li>
@@ -184,12 +184,12 @@
                         else
                         {
                             <li class="nav-item">
-                                <span class="nav-link user-greeting">
+                                <span class="nav-link Account-greeting">
                                     <i class="bi bi-person-circle"></i> @User.Identity.Name
                                 </span>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark btn-logout" asp-controller="User" asp-action="logout">
+                                <a class="nav-link text-dark btn-logout" asp-controller="Account" asp-action="logout">
                                     <i class="bi bi-box-arrow-right"></i> Logout
                                 </a>
                             </li>
