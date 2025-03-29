@@ -125,21 +125,23 @@
                     <input type="hidden" name="Answers[@i].QuestionID" value="@Model.Questions[i].QuestionID" />
 
                     <label>@Model.Questions[i].QuestionText</label>
-
-                    <div class="radio-group">
-                        @foreach (var choice in Model.Questions[i].choseDTOs)
-                        {
-                            <label class="radio-option">
-                                <input type="radio" name="Answers[@i].OptionID" value="@choice.Id" required />
-                                @choice.Text
-                            </label>
-                        }
-                    </div>
-
                     @if (Model.Questions[i].QuestionType == "Essay")
                     {
                         <textarea name="Answers[@i].AnswerText" placeholder="Write your answer here..."></textarea>
+                    }else{
+                        <div class="radio-group">
+                            @foreach (var choice in Model.Questions[i].choseDTOs)
+                            {
+                                <label class="radio-option">
+                                    <input type="radio" name="Answers[@i].OptionID" value="@choice.Id" required />
+                                    @choice.Text
+                                </label>
+                            }
+                        </div>
                     }
+                 
+
+                    
                 </div>
             }
         </div>

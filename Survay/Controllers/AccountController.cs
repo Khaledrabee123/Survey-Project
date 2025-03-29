@@ -33,10 +33,6 @@ namespace Survay.Controllers
             return View();
         }
 
-
-
-
-
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Register(UserRegestertionDTO viewUser)
@@ -86,10 +82,6 @@ namespace Survay.Controllers
                 Schemes = await SignInManager.GetExternalAuthenticationSchemesAsync(),
             };
 
-            foreach (var scheme in await SignInManager.GetExternalAuthenticationSchemesAsync())
-            {
-                Console.WriteLine($"Provider: {scheme.Name}, DisplayName: {scheme.DisplayName}");
-            }
             return View(login);
 
 

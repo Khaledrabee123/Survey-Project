@@ -67,7 +67,7 @@ namespace Survay.Repositores.Surveyrepo
                               .Select(q => new
                               {
                                   question = q.QuestionText,
-                                  isMCQ = db.choses.Any(c => c.QuestionID == q.QuestionID),
+                                  isMCQ = q.QuestionType=="MCQ",
                                   choices = db.choses
                                       .Where(c => c.QuestionID == q.QuestionID)
                                       .Select(c => new

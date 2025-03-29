@@ -22,7 +22,7 @@ namespace Survay.Repositores.Surveyrepo
 
         public async Task AddAsync(Survey survay)
         {
-           await db.Surveys.AddAsync(survay);
+            await db.Surveys.AddAsync(survay);
             db.SaveChanges();
         }
 
@@ -45,12 +45,6 @@ namespace Survay.Repositores.Surveyrepo
             db.SaveChanges();
             return;
         }
-
-      
-
-     
-
-     
 
         public async Task Update(Survey survey)
         {

@@ -29,7 +29,8 @@ namespace Survay.Repositores.ChoiceRepo
 
         public async Task<bool> IsMCQAsync(int questionId)
         {
-            return await db.choses.AnyAsync(c => c.QuestionID == questionId);
+            var s = (db.Questions.Where(e => e.QuestionID == questionId).FirstOrDefault());
+            return ( s.QuestionType =="MCQ");
         }
         public Task Update(Choice choicee)
         {
