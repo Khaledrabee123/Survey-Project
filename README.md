@@ -1,2 +1,5 @@
 # Survey-Project
 Survay Project
+back CQRS WITH MEDITOR,  REPOS , SERVICES, LOGGING , IN MEMORY CACHE, 
+
+FRONT HTML , CSS JS , AJAX , 
