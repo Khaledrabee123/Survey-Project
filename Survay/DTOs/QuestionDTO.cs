@@ -2,6 +2,7 @@
 
 namespace Survay.DTOs
 {
+// Q dot
     public class QuestionDTO
     {
         [Key]
