@@ -13,9 +13,8 @@ namespace Survay.Models.database
         public int SurveyID { get; set; }
         public Survey Survey { get; set; }
 
-        public string UserID { get; set; }
-        [Required]
-        public User User { get; set; }
+        public string? UserID { get; set; }
+        public User?User { get; set; }
 
         public ICollection<Answer> Answers { get; set; } = new List<Answer>();
     }

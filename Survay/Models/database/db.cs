@@ -30,7 +30,7 @@ namespace Survay.Models.database
         public virtual DbSet<Answer> Answers { get; set; }
 
 
-
+         
         public void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder); // Important for Identity
